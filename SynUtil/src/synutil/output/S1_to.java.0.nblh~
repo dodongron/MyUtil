@@ -1,0 +1,63 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package synutil.output;
+
+import java.util.List;
+import synutil.pnl.S1_set;
+
+/**
+ *
+ * @author Dummy
+ */
+public class S1_to {
+
+    public static String set_to(List<S1_set.to_col> to, String database, String table_name) {
+
+        String parameter = "";
+
+        String text = "public static class to_" + table_name + "(\n\n";
+        int i = 0;
+        for (S1_set.to_col t : to) {
+            String type = t.type;
+            if (type.equalsIgnoreCase("integer") || type.equalsIgnoreCase("tinyint")) {
+                type = "int";
+            } else if (type.equalsIgnoreCase("double")) {
+                type = "double";
+            } else {
+                type = "String";
+            }
+            text = text + "   public final " + type + " " + t.name + ";\n";
+
+            if (i == to.size()) {
+                parameter = parameter + " " + type + " " + t.name + "";
+            } else {
+                parameter = parameter + " " + type + " " + t.name + ",";
+            }
+
+//            System.out.println(t.name+ " - "+t.type);\i
+            i++;
+        }
+
+        text = text + "\n";
+        text = text + "public to_" + table_name + "(" + parameter + ")" + "{\n";
+        for (S1_set.to_col t : to) {
+
+            String type = t.type;
+            if (type.equalsIgnoreCase("integer") || type.equalsIgnoreCase("tinyint")) {
+                type = "int";
+            } else if (type.equalsIgnoreCase("double")) {
+                type = "double";
+            } else {
+                type = "String";
+            }
+            text = text + "   this." + t.name + " = " + t.name + ";\n";
+        }
+
+        text = text + "     )\n";
+        text = text + ")\n";
+
+        return text;
+    }
+}
